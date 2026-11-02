@@ -13,6 +13,7 @@
 
 #topic var
 topic = 0
+#First topic
 def topic1():
     #make topic global to access
     global topic
@@ -56,10 +57,8 @@ def topic1():
     elif user_choice.__contains__('n'):
         topic += 1
     
-  
 
-   
-
+#Second topic
 def topic2():
     #make topic global to access
     global topic
@@ -76,7 +75,7 @@ we will only tackle a little bit of them.
 """
 
     content_syntax2 = """
-Input
+Code
 +-----------------------+
 |print("Hello World)"   |
 |                       |
@@ -94,10 +93,12 @@ Output
 
     content_syntax3 = """
 *Next one is input().
--Input is used to take user input from the terminal. it's just the way of computer asking the user to communicate/or send any message.
-Example:
+-Input is used to take user input from the terminal. it's just the way of computer asking the user to communicate/or send any message. """
 
-Input
+
+    content_syntax4 = """
+Example:    
+Code
 +--------------------------------------------------------------------------------------------------+
 |question = input("What is your name?") #This is a variable. we will tackle it later on.           |
 |print("Hello " + question)                                                                        |
@@ -118,18 +119,151 @@ Output
     input("press Enter to continue \n\n")
     print(content_syntax2)
     input("press Enter to continue \n\n")
+    print("\n" * 40)
     print(content_syntax3)
-    
+    input("press Enter to continue \n\n")
+    print(content_syntax4)
+
+
     #ask user to go back to main menu or continue next page.
-    user_choice = str(input("press q to go back to main menu | press n to move to next topic     "))
+    user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
         
     if user_choice.__contains__('q'):
         topic -= 1
     elif user_choice.__contains__('n'):
         topic += 1
-      
+
+#Third topic
 def topic3():
-    pass
+    #Make topic global to access 
+    global topic
+
+    #This one will tackle variables and basic arithmetic operations
+    content_variables1 = """
+                                                    #Variables
+*Variables are like containers/box. they are used to store different kind of items. in python, variables
+stores different data type. they are different data types on python:
+-Int -> Numbers.
+-Str/String -> Texts.
+-Float/Double -> decimals like 0.5, 0.6 etc
+-Boolean -> True or False
+"""
+    content_variables2 = """
+*Data types are kind of identifiers(I.D). they are used to determine what is what or which is which on a program/code.
+Just imagine it like this, Variable is the Box, while the data type is the content of the box. variables can be named,
+just like how you put a name on a Box.
+"""
+
+    content_variables3 = """
+Example:
++---------------------------------------------------------------------------------------------------------+
+|box1 = 10 #This box contains a number(Int)                                                               |
+|box2 = "Hello world!" #This one is a text(String). remember to always surround it on a Double quotation. |
+|box3 = 0.5 #this one is a decimal(float/double)                                                          |
+|box4 = True #This one is a boolean. it can only contain True or False                                    |
++---------------------------------------------------------------------------------------------------------+
+
+*Inorder to print the value of the variables, you just put it inside the print() syntax
+"""
+
+    content_variables4 = """
+
+Example:
+Code
++---------------------------------------+
+|print(box1) #Outputs 10                |
+|print(box2) #Outputs "Hello world!"    |
+|print(box3) #Outputs 0.5               |
+|print(box4) #Outputs True              |
++---------------------------------------+
+
+Output
++-------------------+
+|10                 |
+|Hello world!       |
+|0.5                |
+|True               |
++-------------------+
+"""
+    #Print the contents
+    print(content_variables1)
+    input("press Enter to continue")
+    print(content_variables2)
+    input("press Enter to continue")
+    print(content_variables3)
+    input("press Enter to continue")
+    print(content_variables4)
+
+
+    #ask user to go back to main menu or continue next page.
+    user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
+            
+    if user_choice.__contains__('q'):
+        topic -= 1
+    elif user_choice.__contains__('n'):
+        topic += 1
+
+#Fourth topic
+def topic4():
+    #Make topic accessable globally
+    global topic
+    #Content
+    content_arithmetic = """
+                                            #Arithmetic operation
+*Now that we understand how variables and data types work together, we will now tackle arithmetic operations!
+Arithematic operations are mathematical operations that can be used to add, subtract, multiply, or divide a value.
+Here are a list of arithemetic operation on python:
+"""
+
+    content_arithmetic2 = """
++-------------------------------------------------------------------------------+         
+|   + --> Addition       | 5 + 1 = 6                                            | 
+|   - --> Subtraction    | 5 - 1 = 4                                            |
+|   / --> Division       | 5 / 2 = 2.5                                          |
+|   * --> Multiplication | 10 * 2 = 20                                          | 
+|  // --> Floor division | 5 // 2 = 2 #Notice that it outputs 2 instead of 2.5  |
+|   % --> Modulus        | 10 % 3 = 1                                           |
+|  ** --> Exponentiation | 5 ** 2 = 25 #It's the same as 5 x 5                  |
++-------------------------------------------------------------------------------+
+"""
+
+    content_arithmetic3 = """
+*The arithemtic shown can be performed on variables(only Int and Float). Here's an example:
+
+"""
+    content_arithmetic4 = """
+Code
++-----------------------------------+
+|box1 = 10                          |
+|box2 = 5                           |
+|result = box1 + box2 # 10 + 5      |
+|print(result) # 15                 |
++-----------------------------------+
+
+Output
++-------------------+
+|15                 |
+|                   |
++-------------------+
+"""
+
+
+    #prints the content
+    print(content_arithmetic)
+    input("press Enter to continue")
+    print(content_arithmetic2)
+    input("press Enter to continue")
+    print(content_arithmetic3)
+    input("press Enter to continue")
+    print(content_arithmetic4)
+
+    #ask user to go back to main menu or continue next page.
+    user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
+            
+    if user_choice.__contains__('q'):
+        topic -= 1
+    elif user_choice.__contains__('n'):
+        topic += 1
 
 #Main screen/Main menu
 def main_menu():
@@ -141,7 +275,9 @@ Welcome to Pytutorial book!
 please choose a topic:
     1. Introduction to programming.
     2. Basic syntax.
-    3. Relational operator.
+    3. Variables
+    4. Arithmethic operation
+    5. Relational operations
 """
 
     print(content) #print content
@@ -156,8 +292,10 @@ please choose a topic:
             topic = 2
         case 3:
             topic = 3
+        case 4:
+            topic = 4
         case _:
-            raise ValueError("Invalid value! only accepts 1,2 or 3!")
+            raise ValueError("Invalid value! only accepts between 1-5!")
 
 
 #The main loop
@@ -172,7 +310,11 @@ while not ext:
         print("\n" * 50)
         topic2()
     elif topic == 3:
+        print("\n" * 50)
         topic3()
+    elif topic == 4:
+        print("\n" * 50)
+        topic4()
     elif topic == -1:
         main_menu()
     #ask user to go back to main menu or go to next topic
