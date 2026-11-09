@@ -45,7 +45,7 @@ def topic1():
 
     print(content_intro)
     #wait for any input so that it will print the second part.
-    input("")
+    input("press Enter to continue...")
     print(content_intro2)
 
 
@@ -216,15 +216,15 @@ Here are a list of arithemetic operation on python:
 """
 
     content_arithmetic2 = """
-+-------------------------------------------------------------------------------+         
-|   + --> Addition       | 5 + 1 = 6                                            | 
-|   - --> Subtraction    | 5 - 1 = 4                                            |
-|   / --> Division       | 5 / 2 = 2.5                                          |
-|   * --> Multiplication | 10 * 2 = 20                                          | 
-|  // --> Floor division | 5 // 2 = 2 #Notice that it outputs 2 instead of 2.5  |
-|   % --> Modulus        | 10 % 3 = 1                                           |
-|  ** --> Exponentiation | 5 ** 2 = 25 #It's the same as 5 x 5                  |
-+-------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------+         
+|   +     --> Addition       | 5 + 1 = 6                                            | 
+|   -     --> Subtraction    | 5 - 1 = 4                                            |
+|   /     --> Division       | 5 / 2 = 2.5                                          |
+|   *     --> Multiplication | 10 * 2 = 20                                          | 
+|  //     --> Floor division | 5 // 2 = 2 #Notice that it outputs 2 instead of 2.5  |
+|   %     --> Modulus        | 10 % 3 = 1                                           |
+|  **     --> Exponentiation | 5 ** 2 = 25 #It's the same as 5 x 5                  |
++-----------------------------------------------------------------------------------+
 """
 
     content_arithmetic3 = """
@@ -265,6 +265,75 @@ Output
     elif user_choice.__contains__('n'):
         topic += 1
 
+
+def topic5():
+    #make topic variable global.
+    global topic
+
+    #The content
+    content_relational1 = """
+                                                            #Relational Operator
+    *Relational operator are used to compare two values. just like in English languange, we used AND, OR, NOT to compare values. 
+    Most of the time, we use this inside an IF block(a syntax used for making decision).
+"""
+
+    content_relational2 = """
+    *What is IF?
+    -(if) keyword is used to make decision on python. we put conditions inside it(like 1 > 3) and then it will check if it's True or Not.
+    -for example:
+    """
+
+    content_relational3 = """
+    CODE
+    +----------------------------------------------------------------------+
+    |                                                                      |
+    |if 20 > 5: #is 20 greater than 5?                                     |
+    |   #If it's true, the code in here will be runned.                    |
+    |   print("The condition is true!")                                    |
+    |                                                                      |
+    |else:                                                                 |
+    |    #if the condition is not true, this will run instead.             |
+    |   print("the condition is not true!")                                |
+    |                                                                      |
+    |                                                                      |
+    +----------------------------------------------------------------------+
+
+    OUTPUT
+    +----------------------------+
+    |The condition is true!      |
+    |                            |
+    |                            |
+    +----------------------------+
+"""
+
+    content_relational4 = """ 
+    Python contains a built-in comparison c
+"""
+    
+
+    
+    #Print the content
+    print(content_relational1)
+    input("press Enter to continue.")
+    print(content_relational2)
+    input("press Enter to continue.")
+    print(content_relational3)
+    input("press Enter to continue.")
+    print(content_relational5)
+
+
+    
+    #ask user to go back to main menu or continue next page.
+    user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
+            
+    if user_choice.__contains__('q'):
+        topic -= 1
+    elif user_choice.__contains__('n'):
+        topic += 1
+        
+
+
+
 #Main screen/Main menu
 def main_menu():
     #Topic variable to choose topic from lessons.
@@ -285,6 +354,7 @@ please choose a topic:
     #ask user for choices
     choices = int(input("Please enter a topic(1-3): "))
 
+    #Check the user input.
     match choices:
         case 1:
             topic = 1
@@ -294,8 +364,10 @@ please choose a topic:
             topic = 3
         case 4:
             topic = 4
+        case 5:
+            topic = 5
         case _:
-            raise ValueError("Invalid value! only accepts between 1-5!")
+            raise ValueError("Invalid value! only accepts between 1-5!") 
 
 
 #The main loop
@@ -315,6 +387,9 @@ while not ext:
     elif topic == 4:
         print("\n" * 50)
         topic4()
+    elif topic == 5:
+        print("\n" * 50)
+        topic5()
     elif topic == -1:
         main_menu()
     #ask user to go back to main menu or go to next topic
