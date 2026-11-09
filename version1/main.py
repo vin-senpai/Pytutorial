@@ -362,7 +362,8 @@ def topic5():
 
 #Main screen/Main menu
 def main_menu():
-    #Topic variable to choose topic from lessons.
+    
+    #Make choices and topic variable global.
     global topic
     #The content
     content = r"""
@@ -373,27 +374,36 @@ please choose a topic:
     3. Variables
     4. Arithmethic operation
     5. Relational operations
+    6. Exit the program.
 """
 
     print(content) #print content
 
     #ask user for choices
-    choices = int(input("Please enter a topic(1-3): "))
+    choices = input("Please enter a topic(1-5): ")
 
-    #Check the user input.
-    match choices:
-        case 1:
-            topic = 1
-        case 2:
-            topic = 2
-        case 3:
-            topic = 3
-        case 4:
-            topic = 4
-        case 5:
-            topic = 5
-        case _:
-            raise ValueError("Invalid value! only accepts between 1-5!") 
+    if choices.isdigit():
+            match int(choices):
+                case 1:
+                    topic = 1
+                case 2:
+                    topic = 2
+                case 3:
+                    topic = 3
+                case 4:
+                    topic = 4
+                case 5:
+                    topic = 5
+                case 6:
+                    exit(0)
+                case _:
+                    raise ValueError("Invalid value! only accepts between 1-5!")
+    else:
+           raise SyntaxError("Invalid Input!Only accepts Numbers!")
+
+    
+       
+   
 
 
 #The main loop
@@ -401,6 +411,10 @@ main_menu()
 
 ext = False
 while not ext:
+    #Check the user input.
+    print(topic)
+    
+    
     if topic == 1:
         print("\n" * 50)
         topic1()
