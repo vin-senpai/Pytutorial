@@ -273,13 +273,13 @@ def topic5():
     #The content
     content_relational1 = """
                                                             #Relational Operator
-    *Relational operator are used to compare two values. just like in English languange, we used AND, OR, NOT to compare values. 
+    *Relational operator are used to compare two values. just like in Math, we used ==(is equals), >(greater than), <(less than). 
     Most of the time, we use this inside an IF block(a syntax used for making decision).
 """
 
     content_relational2 = """
     *What is IF?
-    -(if) keyword is used to make decision on python. we put conditions inside it(like 1 > 3) and then it will check if it's True or Not.
+    -(if) keyword is used to make decision on python. we put conditions inside and then it will check if it's True or Not.
     -for example:
     """
 
@@ -307,7 +307,27 @@ def topic5():
 """
 
     content_relational4 = """ 
-    Python contains a built-in comparison c
+    Python has a variety of operators it can used to compare values.
+    Here's and table of python's relational operator:
+"""
+    content_relational5 = """
+    +----------------+------------------------+-----------------+
+    |    OPERATOR    |         NAME           |     EXAMPLE     |
+    +----------------+------------------------+-----------------+
+    |      ==        |      is equal to       |   1 == 1 #True  | 
+    +----------------+------------------------+-----------------+
+    |      !=        |      not equal to      |   1 != 1 #False |
+    +----------------+------------------------+-----------------+
+    |      >         |      greater than      |   1 > 5 #False  |
+    +----------------+------------------------+-----------------+
+    |      <         |      less than         |   5 < 10  #True |
+    +----------------+------------------------+-----------------+
+    |     >=         |     greather than      |   5 >= 5 #True  |
+    |                |        or equal.       |                 |
+    +----------------+------------------------+-----------------+
+    |     <=         |      less than         |   5 <= 2 #False |
+    |                |     or equal to.       |                 |
+    +----------------+------------------------+-----------------+
 """
     
 
@@ -315,14 +335,20 @@ def topic5():
     #Print the content
     print(content_relational1)
     input("press Enter to continue.")
+    print("\n" * 50)
     print(content_relational2)
     input("press Enter to continue.")
+    print("\n" * 50)
     print(content_relational3)
     input("press Enter to continue.")
+    print("\n" * 50)
+    print(content_relational4)
+    input("press Enter to continue.")
+    print("\n" * 50)
     print(content_relational5)
+    input("press Enter to continue.")
 
 
-    
     #ask user to go back to main menu or continue next page.
     user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
             
