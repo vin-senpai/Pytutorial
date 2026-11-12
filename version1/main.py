@@ -46,6 +46,7 @@ def topic1():
     print(content_intro)
     #wait for any input so that it will print the second part.
     input("press Enter to continue...")
+    print("\n" * 51)
     print(content_intro2)
 
 
@@ -77,7 +78,7 @@ we will only tackle a little bit of them.
     content_syntax2 = """
 Code
 +-----------------------+
-|print("Hello World)"   |
+|print("Hello World")   |
 |                       |
 |                       |
 +-----------------------+
@@ -190,6 +191,7 @@ Output
     input("press Enter to continue")
     print(content_variables2)
     input("press Enter to continue")
+    print("\n" * 51)
     print(content_variables3)
     input("press Enter to continue")
     print(content_variables4)
@@ -228,7 +230,7 @@ Here are a list of arithemetic operation on python:
 """
 
     content_arithmetic3 = """
-*The arithemtic shown can be performed on variables(only Int and Float). Here's an example:
+*The arithemtic shown can be performed on variables(eg. Int and Float). Here's an example:
 
 """
     content_arithmetic4 = """
@@ -350,13 +352,12 @@ def topic5():
 
 
     #ask user to go back to main menu or continue next page.
-    user_choice = str(input("press q to go back to previous topic | press n to move to next topic     "))
+    user_choice = str(input("press q to go back to previous topic"))
             
     if user_choice.__contains__('q'):
         topic -= 1
-    elif user_choice.__contains__('n'):
-        topic += 1
-        
+    else:
+       print("ERROR! INVALID OUTPUT!")
 
 
 
@@ -395,6 +396,7 @@ please choose a topic:
                 case 5:
                     topic = 5
                 case 6:
+                    print("Have a great day! \U20001F600")
                     exit(0)
                 case _:
                     raise ValueError("Invalid value! only accepts between 1-5!")
