@@ -8,4 +8,4 @@ A school project python program that act as a book/guide for learning python(Bas
 ## This project consist of two version:
 The first one is pure python only. this one doesn't include any library or whatsoever(This is for demonstration).
 
-The second one is a GUI version. this includes tkinter library and json. this is for the finishing touch. 
+The second one is a GUI version. this includes tkinter library.this is for the finishing touch. 
