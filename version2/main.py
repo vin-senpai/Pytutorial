@@ -7,13 +7,13 @@ import sys
 import os
 from tkinter import ttk
 
+
 #Initialize the window 
 root = tkinter.Tk()
 root.geometry("1280x900")
 #set the root screen
 root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
-frame = ttk.Frame(root,padding=5)
 
 panedwin = None
 #style
@@ -30,7 +30,7 @@ style.configure(
 
 style.configure(
     "learn.TLabel",
-    font=("Arial", 16)
+    font=("Arial", 12)
 )
 
 
@@ -230,9 +230,9 @@ def output(main):
         current_editor = playground_editor
     else:
         raise ValueError("Invalid input")
-    current_editor.save_to_file("outputfile.py")
-    #first we save the python file
    
+    #first we save the python file
+    current_editor.save_to_file("outputfile.py")
     #then we get the file name
     file = "outputfile.py"
     #here we use the subprocess module to communicate with python so that the file will be compiled.
@@ -240,7 +240,7 @@ def output(main):
     #output = subprocess.Popen(["cmd", "/k", sys.executable,file])
 
     logpath = os.path.abspath("log.txt") #The name of the log file to store our program logs
-    subprocess.run(f'start /wait "" cmd /c " "python" "outputfile.py" -u > "{logpath}" 2>&1" ',shell=True) #This function will create a window a open cmd to run our python script
+    subprocess.run(f'start /wait "" cmd /c " {sys.executable} "outputfile.py" -u > "{logpath}" 2>&1" ',shell=True) #This function will create a window a open cmd to run our python script
 
     #And then we store the result into our widget.
     ##First we need to open and read the log file 
@@ -259,10 +259,12 @@ def output(main):
 #The playground
 def playground():
     #Clear the root window
-    for childs in root.winfo_children():
-        childs.destroy()
 
-    #Load the editor
+    for i in root.winfo_children():
+        i.destroy()
+
+    #Load the editor    
+    global side_frame
     playground_frame = ttk.Frame(root)
     side_frame = ttk.Frame(root)
 
@@ -270,19 +272,43 @@ def playground():
     playground_frame.pack(side="right",expand=1)
 
     #Add buttons
+
+    #Save button
     save_btn = ttk.Button(side_frame, text="Save")
     save_btn.grid(row=1)
 
+    #Load button
     load_btn = ttk.Button(side_frame, text="Load")
     load_btn.grid(row=2)
 
+    #Run button
     run_btn = ttk.Button(side_frame, text="Run", command=lambda: output(2))
     run_btn.grid(row=3)
 
+    #Back button
+    back_btn = ttk.Button(side_frame,text="Back",command=goback)
+    back_btn.grid(row=4,pady=30)
     #Make the editor global
     global playground_editor
+
+
     playground_editor = tkcode.CodeEditor(playground_frame,font=("Arial",20))
     playground_editor.grid(column=1)
+
+
+def goback():
+    #Clear the root window
+
+    playground_editor.master.grid_remove()
+    #Load the main screen.
+    side_frame.pack_forget()
+
+    #Delete the remaing widgets
+    for ii in root.winfo_children():
+        ii.destroy()
+
+    main_screen()
+    
 
 #Clear button functionality
 def clear():
@@ -295,7 +321,7 @@ def code_editor():
     global run_button
    
     #initialize the code editor.
-    codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",20))
+    codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",15))
     codeeditor.grid(row=2,column=1,ipady=3)
     #Add the run button
     run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=lambda: output(1))
@@ -385,17 +411,20 @@ print(box4) #Outputs True
     elif page == 8:
         maincontent.set(content9)
         codeeditor.content = """
-
-+-----------------------------------------------------------------------------------+         
-|   +     --> Addition       | 5 + 1 = 6                                            | 
-|   -     --> Subtraction    | 5 - 1 = 4                                            |
-|   /     --> Division       | 5 / 2 = 2.5                                          |
-|   *     --> Multiplication | 10 * 2 = 20                                          | 
-|  //     --> Floor division | 5 // 2 = 2 #Notice that it outputs 2 instead of 2.5  |
-|   %     --> Modulus        | 10 % 3 = 1                                           |
-|  **     --> Exponentiation | 5 ** 2 = 25 #It's the same as 5 x 5                  |
-+-----------------------------------------------------------------------------------+
-
+# + -> addition
+add = 1 + 1 #outputs 2
+# - -> subtraction
+sub = 5 - 1 #Outputs 4
+# * -> multiplication
+mult = 5 * 5 #outputs 25
+# / -> division
+div = 25 / 5 #outputs 5
+# // -> floor division
+floor_div = 5 // 2 # 2  
+# % -> modulus
+modulus = 10 % 3 # 1
+# ** -> exponent
+expont = 5 ** 2 # 25   
 """
     elif page == 9:
         maincontent.set("Here's an example of arithmetic in python:")
@@ -420,23 +449,24 @@ print(expont)
     elif page == 10:
         maincontent.set(content10)
         codeeditor.content = """
-+----------------+------------------------+-----------------+
-|    OPERATOR    |         NAME           |     EXAMPLE     |
-+----------------+------------------------+-----------------+
-|      ==        |      is equal to       |   1 == 1 #True  | 
-+----------------+------------------------+-----------------+
-|      !=        |      not equal to      |   1 != 1 #False |
-+----------------+------------------------+-----------------+
-|      >         |      greater than      |   1 > 5 #False  |
-+----------------+------------------------+-----------------+
-|      <         |      less than         |   5 < 10  #True |
-+----------------+------------------------+-----------------+
-|     >=         |     greather than      |   5 >= 5 #True  |
-|                |        or equal.       |                 |
-+----------------+------------------------+-----------------+
-|     <=         |      less than         |   5 <= 2 #False |
-|                |     or equal to.       |                 |
-+----------------+------------------------+-----------------+
+# equal to ==
+if 5 == 5:
+    print("5 is equal to 5")
+# not equal to !=
+if 5 != 6:
+    print("5 is not equal to 6")
+# greater than >
+if 5 > 2:
+    print("5 is greater than 2")
+# less than <
+if 5 < 10:
+    print("5 is less than 10")
+# greater than or equal to >=
+if 5 >= 5:
+    print("5 is greater than or equal to 5")
+# less than or equal to <=
+if 5 <= 10:
+    print("5 is less than or equal to 10")
 """
     elif page == 11:
         maincontent.set("Here's an example of relational operator in python:")
@@ -467,11 +497,11 @@ if variable <= 25:
 
 
 
-
 def main_screen():
     #Create the main frame to put the widgets.
-    
-    
+    global frame
+    frame = ttk.Frame(root,padding=5)
+
     frame.grid(column=0, row=0, sticky='nsew')
 
     frame.columnconfigure(1,weight=1,pad=50)
@@ -486,8 +516,6 @@ def main_screen():
 
     btn2 = ttk.Button(frame,text="Playground",style="main.TButton",command=playground)
     btn2.grid(column=1,row=3)
-
-
 
 
 main_screen()
