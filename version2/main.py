@@ -2,13 +2,13 @@
 
 import tkinter
 import tkcode
+import subprocess
 from tkinter import ttk
 
 
 #Initialize the window 
 root = tkinter.Tk()
 root.geometry("1280x900")
-
 #set the root screen
 root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
@@ -21,7 +21,7 @@ style.theme_use("clam")
 #For textx
 style.configure(
     "main.TLabel",
-    font=("Arial",50),
+    font=("ansi",50),
     foreground = "#ffffff",
     background = "#706000"
 )
@@ -47,9 +47,14 @@ style.configure(
 )
 
 style.configure(
-    "codeeditor.TButton",
+    "codeeditorrun.TButton",
     background="red",
     foreground="white"
+)
+
+style.configure(
+    "codeeditorclear.TButton",
+    background="darkgray"
 )
 
 style.map(
@@ -59,18 +64,23 @@ style.map(
 )
 
 style.map(
-    "codeeditor.TButton",
+    "codeeditorrun.TButton",
     background = [('active','darkred')]
+)
+
+style.map(
+    "codeeditorclear.TButton",
+    background=[('active', 'gray')]
 )
 
 
 
 
 
-#This is where the topic(intro to program, syntax..etc) goes. we will make it in one function inorder to easily manage it.
+#This is where the page(intro to program, syntax..etc) goes. we will make it in one function inorder to easily manage it.
 def learn():
-    #Access the topic variable and make maincontent global for change_topic function a
-    global topic
+    #Access the page variable and make maincontent global for change_page function a
+    global page
     global maincontent
     #Clear the current screen.
     for children in frame.winfo_children():
@@ -112,19 +122,23 @@ def learn():
   *The first and most used syntax on python is Print().
   -Print is used to display something to the terminal(screen). for example to print 'Hello world':
 
+  *Next one is input().
+-Input is used to take user input from the terminal. it's just the way of computer asking the user to communicate/or send any message. 
+
 """
     #make the content variables global 
     global content1
     global content2
     global content3
     global content4
+    global content5
     global panedwin
     #Split the raw strings into content parts
     content1 = rawstring[0:760] 
     content2 = rawstring[760:1105]
     content3 = rawstring[1097:1496]
-    content4 = rawstring[1495:1800]
-    print(content4)
+    content4 = rawstring[1495:1650]
+    content5 = rawstring[1652:1900]
     maincontent = tkinter.StringVar()
     #Apply the string on the maincontent stringvar
     maincontent.set(content1)
@@ -139,56 +153,106 @@ def learn():
     txt.grid(column=1,row=0)
     #The buttons.
 
-    next = ttk.Button(panedwin, text="Next",command=lambda: change_topic(1)).grid(column=2,row=2,padx=5,pady=7)
-    prev = ttk.Button(panedwin, text="Previous", command=lambda: change_topic(-1)).grid(column=0,row=2,padx=5,pady=10)
+    next = ttk.Button(panedwin, text="Next",command=lambda: change_page(1)).grid(column=2,row=2,padx=5,pady=7)
+    prev = ttk.Button(panedwin, text="Previous", command=lambda: change_page(-1)).grid(column=0,row=2,padx=5,pady=10)
 
 
     #Insert the panedwin on the frame.
     panedwin.insert()
 
 
+#This is the output function to show the output of the code from the codeeditor.
+def output():
+    #first we save the python file
+    codeeditor.save_to_file("outputfile.py")
+    #then we get the file name
+    file = "outputfile.py"
+    #here we use the subprocess module to communicate with python so that the file will be compiled.
+    output = subprocess.Popen(f"python {file}", stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+    result, error = output.communicate()
+    #And then we store the result into our widget.
+    ##we just use another tkinter window in here so the user can easily close the output window instead of text.
+   
+   
+    global output_window
+    output_window = tkinter.Toplevel()
+    if result:
+        ttk.Label(output_window, text="OUTPUT: ", font=("Arial",30,"bold"),anchor="center").grid(row=0, ipadx=20)
+        ttk.Label(output_window, text=result, font=("Monospace",40)).grid(row=1)
+    elif error:
+        ttk.Label(output_window, text="ERROR: ", font=("Arial",30,"bold")).grid(row=0)
+        ttk.Label(output_window, text=error, font=("Monospace",20)).grid(row=1)
+
+
+    output_window.mainloop()
+   
+#Clear button functionality
+def clear():
+    codeeditor.content = " "
+   
+ 
+    
+
 #This is used for showing code and for the playground
 def code_editor(enable):
+    global codeeditor
+    global run_button
+   
+
+
     if enable == True:
         #initialize the code editor.
-       global codeeditor
-       codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5)
+       codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",20))
        codeeditor.grid(row=1,column=1,ipady=3)
        #Add the run button
-       run_button = ttk.Button(panedwin, text="Run",style="codeeditor.TButton",command=output)
-       run_button.grid(row=1,column=2)
+       run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=output)
+       run_button.place(relheight=0.3,relwidth=0.2,relx=0.8)
+       #Add Clear button
+       clear_button = ttk.Button(codeeditor, text="Clear",style="codeeditorclear.TButton",command=clear)
+       clear_button.place(rely=0.5,relheight=0.5,relwidth=0.2,relx=0.8)
     elif enable == False:
         #Destroy it if not enabled
         codeeditor.destroy()
+        output_window.destroy()
+        run_button.destroy()
+    
+  
+    
 
-#This is the output function to show the output of the code from the codeeditor.
-def output():
-    print(codeeditor.content)
-#This will serve as the topic index for changing the topics on 'learn' function.
-topic = 0
 
-def change_topic(t):
-    #Acces topic var
-    global topic
-    print(topic)
+#This will serve as the page index for changing the pages on 'learn' function.
+page = 0
+
+def change_page(t):
+    #Acces page var
+    global page
+    print(page)
     if t == 1:
-        topic += 1
-    elif t == -1 and topic >= 1:
-        topic -= 1
+        page += 1
+    elif t == -1 and page >= 1:
+        page -= 1
 
-    if topic == 0:
+    if page == 0:
         maincontent.set(content1)
-    elif topic == 1:
+    elif page == 1:
         maincontent.set(content2)
-    elif topic == 2:
+    elif page == 2:
         maincontent.set(content3)
         code_editor(False)
-    elif topic == 3:
+    elif page == 3:
         maincontent.set(content4)
         #here we will show an entry to act as a code editor
         code_editor(True)
         #Set the built in code for this content.
         codeeditor.content = "print(\"hello world\")"
+    elif page == 4:
+        maincontent.set(content5)
+        #We will need to enabled code editor in here again
+        code_editor(True)
+        #set hte built in code.
+        codeeditor.content = "ask = input(\" What's your name? \")"
+
+
 
 
 
