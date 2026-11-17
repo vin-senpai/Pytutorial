@@ -3,8 +3,9 @@
 import tkinter
 import tkcode
 import subprocess
+import sys
+import os
 from tkinter import ttk
-
 
 #Initialize the window 
 root = tkinter.Tk()
@@ -14,10 +15,11 @@ root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
 frame = ttk.Frame(root,padding=5)
 
+panedwin = None
 #style
 style = ttk.Style()
 style.theme_use("clam")
-
+print(sys.executable)
 #For textx
 style.configure(
     "main.TLabel",
@@ -75,6 +77,9 @@ style.map(
 
 
 
+
+
+    
 
 
 #This is where the page(intro to program, syntax..etc) goes. we will make it in one function inorder to easily manage it.
@@ -152,13 +157,18 @@ def learn():
     txt = ttk.Label(panedwin, textvariable=maincontent, style="learn.TLabel", wraplength=450, relief='sunken')
     txt.grid(column=1,row=0)
     #The buttons.
-
-    next = ttk.Button(panedwin, text="Next",command=lambda: change_page(1)).grid(column=2,row=2,padx=5,pady=7)
-    prev = ttk.Button(panedwin, text="Previous", command=lambda: change_page(-1)).grid(column=0,row=2,padx=5,pady=10)
+    next = ttk.Button(panedwin, text="Next",command=lambda: change_page(1)).grid(column=2,row=3,padx=5,pady=7)
+    prev = ttk.Button(panedwin, text="Previous", command=lambda: change_page(-1)).grid(column=0,row=3,padx=5,pady=10)
 
 
     #Insert the panedwin on the frame.
+    #load the code editor but hide it first.
+    code_editor()
+    codeeditor.grid(column=1,row=2)
+    codeeditor.master.grid_forget()
     panedwin.insert()
+
+
 
 
 #This is the output function to show the output of the code from the codeeditor.
@@ -168,57 +178,51 @@ def output():
     #then we get the file name
     file = "outputfile.py"
     #here we use the subprocess module to communicate with python so that the file will be compiled.
-    output = subprocess.Popen(f"python {file}", stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    result, error = output.communicate()
+   #output = subprocess.Popen([sys.executable,"-u",file], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,stdin=subprocess.PIPE,text=True)
+    #output = subprocess.Popen(["cmd", "/k", sys.executable,file])
+
+    logpath = os.path.abspath("log.txt") #The name of the log file to store our program logs
+    subprocess.run(f'start /wait "" cmd /c " "python" "outputfile.py" -u > "{logpath}" 2>&1" ',shell=True) #This function will create a window a open cmd to run our python script
+
     #And then we store the result into our widget.
+    ##First we need to open and read the log file 
+    with open('log.txt','r') as log:
+        result = log.read()
     ##we just use another tkinter window in here so the user can easily close the output window instead of text.
-   
-   
+    
     global output_window
     output_window = tkinter.Toplevel()
     if result:
         ttk.Label(output_window, text="OUTPUT: ", font=("Arial",30,"bold"),anchor="center").grid(row=0, ipadx=20)
         ttk.Label(output_window, text=result, font=("Monospace",40)).grid(row=1)
-    elif error:
-        ttk.Label(output_window, text="ERROR: ", font=("Arial",30,"bold")).grid(row=0)
-        ttk.Label(output_window, text=error, font=("Monospace",20)).grid(row=1)
-
 
     output_window.mainloop()
-   
+
 #Clear button functionality
 def clear():
     codeeditor.content = " "
    
- 
-    
-
 #This is used for showing code and for the playground
-def code_editor(enable):
+def code_editor():
     global codeeditor
     global run_button
    
+    #initialize the code editor.
+    codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",20))
+    codeeditor.grid(row=2,column=1,ipady=3)
+    #Add the run button
+    run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=output)
+    run_button.place(relheight=0.3,relwidth=0.2,relx=0.8)
+    #Add Clear button
+    clear_button = ttk.Button(codeeditor, text="Clear",style="codeeditorclear.TButton",command=clear)
+    clear_button.place(rely=0.5,relheight=0.5,relwidth=0.2,relx=0.8)
 
 
-    if enable == True:
-        #initialize the code editor.
-       codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",20))
-       codeeditor.grid(row=1,column=1,ipady=3)
-       #Add the run button
-       run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=output)
-       run_button.place(relheight=0.3,relwidth=0.2,relx=0.8)
-       #Add Clear button
-       clear_button = ttk.Button(codeeditor, text="Clear",style="codeeditorclear.TButton",command=clear)
-       clear_button.place(rely=0.5,relheight=0.5,relwidth=0.2,relx=0.8)
-    elif enable == False:
-        #Destroy it if not enabled
-        codeeditor.destroy()
-        output_window.destroy()
-        run_button.destroy()
-    
+
+
+
+
   
-    
-
 
 #This will serve as the page index for changing the pages on 'learn' function.
 page = 0
@@ -226,11 +230,13 @@ page = 0
 def change_page(t):
     #Acces page var
     global page
+    
     print(page)
     if t == 1:
         page += 1
     elif t == -1 and page >= 1:
         page -= 1
+     
 
     if page == 0:
         maincontent.set(content1)
@@ -238,27 +244,27 @@ def change_page(t):
         maincontent.set(content2)
     elif page == 2:
         maincontent.set(content3)
-        code_editor(False)
+        codeeditor.content = ""
+        codeeditor.master.grid_remove()
     elif page == 3:
         maincontent.set(content4)
-        #here we will show an entry to act as a code editor
-        code_editor(True)
+        #here we will enable our code editor to show the example code.
+        codeeditor.master.grid(column=1,row=2)
         #Set the built in code for this content.
         codeeditor.content = "print(\"hello world\")"
     elif page == 4:
         maincontent.set(content5)
         #We will need to enabled code editor in here again
-        code_editor(True)
-        #set hte built in code.
-        codeeditor.content = "ask = input(\" What's your name? \")"
+        #set the built in code.
+        codeeditor.content = """
+ask = input(" What's your name? ")
+print(ask)"""
 
 
 
-
-
-    
 def main_screen():
     #Create the main frame to put the widgets.
+    
     
     frame.grid(column=0, row=0, sticky='nsew')
 
