@@ -3,7 +3,9 @@ A school project python program that act as a book/guide for learning python(Bas
 ## This program includes three topics:
 1. Introduction to programming.
 2. Basic python syntax.
-3. Relational operators(and/or/not).
+3. Relational operators(==,!=,>,<).
+
+It also includes a built-in python code editor.
 
 ## This project consist of two version:
 The first one is pure python only. this one doesn't include any library or whatsoever(This is for demonstration).
