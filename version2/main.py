@@ -218,11 +218,21 @@ Here's and table of python's relational operator:
 
 
 
+    
+
 
 #This is the output function to show the output of the code from the codeeditor.
-def output():
+def output(main):
+    #Set the main editor.
+    if main == 1:
+        current_editor = codeeditor
+    elif main == 2:
+        current_editor = playground_editor
+    else:
+        raise ValueError("Invalid input")
+    current_editor.save_to_file("outputfile.py")
     #first we save the python file
-    codeeditor.save_to_file("outputfile.py")
+   
     #then we get the file name
     file = "outputfile.py"
     #here we use the subprocess module to communicate with python so that the file will be compiled.
@@ -246,9 +256,38 @@ def output():
 
     output_window.mainloop()
 
+#The playground
+def playground():
+    #Clear the root window
+    for childs in root.winfo_children():
+        childs.destroy()
+
+    #Load the editor
+    playground_frame = ttk.Frame(root)
+    side_frame = ttk.Frame(root)
+
+    side_frame.pack(side=["left"],expand=1)
+    playground_frame.pack(side="right",expand=1)
+
+    #Add buttons
+    save_btn = ttk.Button(side_frame, text="Save")
+    save_btn.grid(row=1)
+
+    load_btn = ttk.Button(side_frame, text="Load")
+    load_btn.grid(row=2)
+
+    run_btn = ttk.Button(side_frame, text="Run", command=lambda: output(2))
+    run_btn.grid(row=3)
+
+    #Make the editor global
+    global playground_editor
+    playground_editor = tkcode.CodeEditor(playground_frame,font=("Arial",20))
+    playground_editor.grid(column=1)
+
 #Clear button functionality
 def clear():
     codeeditor.content = " "
+    playground_editor = " "
    
 #This is used for showing code and for the playground
 def code_editor():
@@ -259,7 +298,7 @@ def code_editor():
     codeeditor = tkcode.CodeEditor(panedwin,language="python",height=5,font=("Arial",20))
     codeeditor.grid(row=2,column=1,ipady=3)
     #Add the run button
-    run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=output)
+    run_button = ttk.Button(codeeditor, text="Run",style="codeeditorrun.TButton",command=lambda: output(1))
     run_button.place(relheight=0.3,relwidth=0.2,relx=0.8)
     #Add Clear button
     clear_button = ttk.Button(codeeditor, text="Clear",style="codeeditorclear.TButton",command=clear)
@@ -427,6 +466,8 @@ if variable <= 25:
 """
 
 
+
+
 def main_screen():
     #Create the main frame to put the widgets.
     
@@ -443,9 +484,8 @@ def main_screen():
     btn1 = ttk.Button(frame,text="Learn python",style="main.TButton",command=learn)
     btn1.grid(column=1,row=2,pady=80)
 
-    btn2 = ttk.Button(frame,text="Playground",style="main.TButton")
+    btn2 = ttk.Button(frame,text="Playground",style="main.TButton",command=playground)
     btn2.grid(column=1,row=3)
-
 
 
 
