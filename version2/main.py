@@ -30,7 +30,7 @@ style.configure(
 
 style.configure(
     "learn.TLabel",
-    font=("Arial", 15)
+    font=("Arial", 16)
 )
 
 
@@ -77,9 +77,6 @@ style.map(
 
 
 
-
-
-    
 
 
 #This is where the page(intro to program, syntax..etc) goes. we will make it in one function inorder to easily manage it.
@@ -129,6 +126,42 @@ def learn():
 
   *Next one is input().
 -Input is used to take user input from the terminal. it's just the way of computer asking the user to communicate/or send any message. 
+"""
+    #this is the part 2 of raw string.
+    rawstring2 = """
+                                                        #Variables
+*Variables are like containers/box. they are used to store different kind of items. in python, variables
+    stores different data type. they are different data types on python:
+-Int -> Numbers.
+-Str/String -> Texts.
+-Float/Double -> decimals like 0.5, 0.6 etc
+-Boolean -> True or False
+
+*Data types are kind of identifiers(I.D). they are used to determine what is what or which is which on a program/code.
+Just imagine it like this, Variable is the Box, while the data type is the content of the box. variables can be named,
+just like how you put a name on a Box. 
+
+*Inorder to print the value of the variables, you just put it inside the print() syntax
+Example:
+
+
+                                                    #Arithmetic operation
+*Now that we understand how variables and data types work together, we will now tackle arithmetic operations!
+Arithematic operations are mathematical operations that can be used to add, subtract, multiply, or divide a value.
+Here are a list of arithemetic operation on python: 
+
+                                                    #Relational Operator
+*Relational operator are used to compare two values. just like in Math, we used ==(is equals), >(greater than), <(less than). 
+Most of the time, we use this inside an IF block(a syntax used for making decision). ENDD
+
+*What is IF?
+-(if) keyword is used to make decision on python. we put conditions inside and then it will check if it's True or Not.
+-for example:
+
+
+Python has a variety of operators it can used to compare values.
+Here's and table of python's relational operator:
+
 
 """
     #make the content variables global 
@@ -137,13 +170,28 @@ def learn():
     global content3
     global content4
     global content5
+    global content6
+    global content7
+    global content8
+    global content9
+    global content10
     global panedwin
     #Split the raw strings into content parts
-    content1 = rawstring[0:760] 
+    content1 = rawstring[0:760] #intro 
     content2 = rawstring[760:1105]
-    content3 = rawstring[1097:1496]
+    content3 = rawstring[1097:1496] #Syntax
     content4 = rawstring[1495:1650]
     content5 = rawstring[1652:1900]
+    #content 6 and above use another rawstring variable(because the index number is alread too high!)
+    content6 = rawstring2[50:361] #Variables
+    content7 = rawstring2[357:634]
+    content8 = rawstring2[636:732]
+    content9 = rawstring2[787:1085] #Arithmethic
+    content10 = rawstring2[1140:1372] 
+    
+    print(f"Start: {rawstring2.find("Relational Operator")}")
+    print(f"End: {rawstring2.find("ENDD")}")
+    
     maincontent = tkinter.StringVar()
     #Apply the string on the maincontent stringvar
     maincontent.set(content1)
@@ -223,20 +271,25 @@ def code_editor():
 
 
   
-
 #This will serve as the page index for changing the pages on 'learn' function.
-page = 0
-
+page = 1
 def change_page(t):
     #Acces page var
     global page
     
     print(page)
+    #Increment/decrement page variable each time the button are pressed
     if t == 1:
         page += 1
     elif t == -1 and page >= 1:
-        page -= 1
-     
+        page -= 1   
+
+    #If the page index reaches 12 or more, reset to 1
+    if page > 10:
+        page = 0
+        codeeditor.master.grid_remove() #Hide thy editor.
+
+    
 
     if page == 0:
         maincontent.set(content1)
@@ -255,11 +308,123 @@ def change_page(t):
     elif page == 4:
         maincontent.set(content5)
         #We will need to enabled code editor in here again
+        codeeditor.master.grid(column=1,row=2)
         #set the built in code.
         codeeditor.content = """
 ask = input(" What's your name? ")
 print(ask)"""
 
+    elif page == 5:
+        #WE dont need code editor anymore so hide it.
+        codeeditor.master.grid_remove()
+        maincontent.set(content6)
+    elif page == 6:
+        codeeditor.master.grid(column=1,row=2)
+        maincontent.set(content7)
+        #set the built in code for this content.
+        codeeditor.content = """
+#Data types
+box1 = 10 #This box contains a number(Int)                                                               
+box2 = "Hello world!" #This one is a text(String). remember to always surround it on a Double quotation. 
+box3 = 0.5 #this one is a decimal(float/double)                                                          
+box4 = True #This one is a boolean. it can only contain True or False      
+"""
+    elif page == 7:
+        maincontent.set(content8)
+        codeeditor.content = """
+
+box1 = 10 #This box contains a number(Int)                                                               
+box2 = "Hello world!" #This one is a text(String). remember to always surround it on a Double quotation. 
+box3 = 0.5 #this one is a decimal(float/double)                                                          
+box4 = True #This one is a boolean. it can only contain True or False  
+#print values
+print(box1) #Outputs 10                
+print(box2) #Outputs "Hello world!"    
+print(box3) #Outputs 0.5               
+print(box4) #Outputs True 
+""" 
+    elif page == 8:
+        maincontent.set(content9)
+        codeeditor.content = """
+
++-----------------------------------------------------------------------------------+         
+|   +     --> Addition       | 5 + 1 = 6                                            | 
+|   -     --> Subtraction    | 5 - 1 = 4                                            |
+|   /     --> Division       | 5 / 2 = 2.5                                          |
+|   *     --> Multiplication | 10 * 2 = 20                                          | 
+|  //     --> Floor division | 5 // 2 = 2 #Notice that it outputs 2 instead of 2.5  |
+|   %     --> Modulus        | 10 % 3 = 1                                           |
+|  **     --> Exponentiation | 5 ** 2 = 25 #It's the same as 5 x 5                  |
++-----------------------------------------------------------------------------------+
+
+"""
+    elif page == 9:
+        maincontent.set("Here's an example of arithmetic in python:")
+        codeeditor.content = """
+add = 1 + 1 #outputs 2
+sub = 5 - 1 #Outputs 4
+mult = 5 * 5 #outputs 25
+div = 25 / 5 #outputs 5
+floor_div = 5 // 2 # 2
+modulus = 10 % 3 # 1
+expont = 5 ** 2 # 25
+
+print(add)
+print(sub)
+print(mult)
+print(div)
+print(floor_div)
+print(modulus)
+print(expont)
+
+"""
+    elif page == 10:
+        maincontent.set(content10)
+        codeeditor.content = """
++----------------+------------------------+-----------------+
+|    OPERATOR    |         NAME           |     EXAMPLE     |
++----------------+------------------------+-----------------+
+|      ==        |      is equal to       |   1 == 1 #True  | 
++----------------+------------------------+-----------------+
+|      !=        |      not equal to      |   1 != 1 #False |
++----------------+------------------------+-----------------+
+|      >         |      greater than      |   1 > 5 #False  |
++----------------+------------------------+-----------------+
+|      <         |      less than         |   5 < 10  #True |
++----------------+------------------------+-----------------+
+|     >=         |     greather than      |   5 >= 5 #True  |
+|                |        or equal.       |                 |
++----------------+------------------------+-----------------+
+|     <=         |      less than         |   5 <= 2 #False |
+|                |     or equal to.       |                 |
++----------------+------------------------+-----------------+
+"""
+    elif page == 11:
+        maincontent.set("Here's an example of relational operator in python:")
+        codeeditor.content = """
+
+variable = 10
+
+if variable == 10:
+    print("it's ten")
+
+if variable != 12:
+    print("It's not equal to 12")
+
+if variable > 25:
+    print("Its greater than 25")
+
+if variable < 25:
+    print("Its less than 25")
+
+if variable >= 25:
+    print("Its greater than or equal to 25")
+
+if variable <= 25:
+    print("Its less than or equal to 25")
+
+
+"""
 
 
 def main_screen():
