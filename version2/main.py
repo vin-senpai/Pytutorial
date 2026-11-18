@@ -1,7 +1,7 @@
 #This is the version 2 of the program. this time, it has UI using tkinter. we will add some editor, quiz, and a lot of things in here.
 #use this command to build the program into executable(exe) file.
-#py -m pip install pyinstaller tkcode
-#py -m PyInstaller --noconfirm --clean --onefile --windowed --name Pytutorial version2\main.py
+#python -m pip install pyinstaller tkcode
+#python -m PyInstaller --noconfirm --clean --onefile --windowed --name Pytutorial version2\main.py
 
 import tkinter
 import tkcode
@@ -9,6 +9,7 @@ import subprocess
 import sys
 import os
 from tkinter import ttk
+from tkinter import filedialog
 
 
 #Initialize the window 
@@ -17,6 +18,7 @@ root.geometry("1280x900")
 #set the root screen
 root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
+root.configure(background="#202020")
 
 panedwin = None
 #style
@@ -42,6 +44,12 @@ style.configure(
     "TFrame",
     background = "#202020"
 )
+
+style.configure(
+    "learn.TFrame",
+    background = "#207020"
+)
+
 #For button
 
 style.configure(
@@ -88,7 +96,7 @@ def learn():
     global page
     global maincontent
     #Clear the current screen.
-    for children in frame.winfo_children():
+    for children in root.winfo_children():
         children.destroy()
     
     #Initialize the content variable
@@ -186,22 +194,19 @@ Here's and table of python's relational operator:
     content4 = rawstring[1495:1650]
     content5 = rawstring[1652:1900]
     #content 6 and above use another rawstring variable(because the index number is alread too high!)
-    content6 = rawstring2[50:361] #Variables
+    content6 = rawstring2[50:355] #Variables
     content7 = rawstring2[357:634]
     content8 = rawstring2[636:732]
     content9 = rawstring2[787:1085] #Arithmethic
     content10 = rawstring2[1140:1372] 
-    
-    print(f"Start: {rawstring2.find("Relational Operator")}")
-    print(f"End: {rawstring2.find("ENDD")}")
     
     maincontent = tkinter.StringVar()
     #Apply the string on the maincontent stringvar
     maincontent.set(content1)
 
      #The frame for learning section.
-    panedwin = ttk.Panedwindow(frame,width=500,height=500)
-    panedwin.grid(column=1,row=4,pady=130)
+    panedwin = ttk.Panedwindow(root,width=500,height=500,style="learn.TFrame")
+    panedwin.grid(column=0,row=4,pady=130)
     panedwin.columnconfigure(1, weight=3)
     panedwin.rowconfigure(1,weight=3)
     #The main text widget
@@ -210,7 +215,7 @@ Here's and table of python's relational operator:
     #The buttons.
     next = ttk.Button(panedwin, text="Next",command=lambda: change_page(1)).grid(column=2,row=3,padx=5,pady=7)
     prev = ttk.Button(panedwin, text="Previous", command=lambda: change_page(-1)).grid(column=0,row=3,padx=5,pady=10)
-
+    back = ttk.Button(panedwin, text="Back", command=goback).grid(column=1,row=3,pady=10)
 
     #Insert the panedwin on the frame.
     #load the code editor but hide it first.
@@ -223,6 +228,24 @@ Here's and table of python's relational operator:
 
     
 
+#Function used to save file from the playground.
+def save_file():
+    #Ask the user first where to save the file.
+    the_file = filedialog.asksaveasfilename(defaultextension="py")
+
+    #Open the created file and write the code on it.
+    with open(the_file, "w") as spf:
+       spf.write(playground_editor.content)
+
+
+#Function used to load a file.
+def load_file():
+    #Ask user for the file.
+    load_file = filedialog.askopenfilename()
+
+    #open the file and write it to the editor.
+    with open(load_file) as lpf:
+        playground_editor.content = lpf.read()
 
 #This is the output function to show the output of the code from the codeeditor.
 def output(main):
@@ -279,23 +302,25 @@ def playground():
     #Add buttons
 
     #Save button
-    save_btn = ttk.Button(side_frame, text="Save")
+    save_btn = ttk.Button(side_frame, text="Save", command=save_file)
     save_btn.grid(row=1)
 
     #Load button
-    load_btn = ttk.Button(side_frame, text="Load")
+    load_btn = ttk.Button(side_frame, text="Load",command=load_file)
     load_btn.grid(row=2)
 
     #Run button
     run_btn = ttk.Button(side_frame, text="Run", command=lambda: output(2))
     run_btn.grid(row=3)
 
+    #Clear button
+    clear_btn = ttk.Button(side_frame, text="Clear", command=clear_playground)
+    clear_btn.grid(row=4)
     #Back button
     back_btn = ttk.Button(side_frame,text="Back",command=goback)
-    back_btn.grid(row=4,pady=30)
+    back_btn.grid(row=5,pady=30)
     #Make the editor global
     global playground_editor
-
 
     playground_editor = tkcode.CodeEditor(playground_frame,font=("Arial",20))
     playground_editor.grid(column=1)
@@ -303,23 +328,18 @@ def playground():
 
 def goback():
     #Clear the root window
-
-    playground_editor.master.grid_remove()
-    #Load the main screen.
-    side_frame.pack_forget()
-
     #Delete the remaing widgets
     for ii in root.winfo_children():
         ii.destroy()
-
+    #load the main screen.
     main_screen()
-    
 
-#Clear button functionality
-def clear():
-    codeeditor.content = " "
-    playground_editor = " "
-   
+    #remove the main editor if there is.
+    playground_editor.master.grid_remove()
+    side_frame.pack_forget()
+
+  
+
 #This is used for showing code and for the playground
 def code_editor():
     global codeeditor
@@ -337,6 +357,13 @@ def code_editor():
 
 
 
+#Clear button functionality
+def clear_playground():
+    playground_editor.content = " "
+
+def clear():
+    codeeditor.content = " "
+   
 
 
 
@@ -501,7 +528,7 @@ if variable <= 25:
 """
 
 
-
+#The main screen of the program.
 def main_screen():
     #Create the main frame to put the widgets.
     global frame

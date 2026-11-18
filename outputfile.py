@@ -1,1 +1,3 @@
-print("main")
+print("it works really")
+
+#Lets gooo!
