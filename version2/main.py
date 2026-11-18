@@ -1,8 +1,7 @@
-#This is the version 2 of the program. this time, it has UI using tkinter. we will add some editor, quiz, and a lot of things in here.
+#This is the version 2 of the program. this time, it has UI using tkinter. we will add some editor, and a lot of things in here.
 #use this command to build the program into executable(exe) file.
 #python -m pip install pyinstaller tkcode
-#python -m PyInstaller --noconfirm --clean --onefile --windowed --name Pytutorial version2\main.py
-
+#python -m PyInstaller --noconfirm --clean --name PytutorialV2 version2/main.py
 import tkinter
 import tkcode
 import subprocess
@@ -262,13 +261,16 @@ def output(main):
     #then we get the file name
     file = "outputfile.py"
     #here we use the subprocess module to communicate with python so that the file will be compiled.
-   #output = subprocess.Popen([sys.executable,"-u",file], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,stdin=subprocess.PIPE,text=True)
     #output = subprocess.Popen(["cmd", "/k", sys.executable,file])
     
     #The python interpreter path
     python_interpreter = sys.executable
     logpath = os.path.abspath("log.txt") #The name of the log file to store our program logs
     subprocess.run(f'start /wait "" cmd /c " {python_interpreter} "outputfile.py" -u > "{logpath}" 2>&1" ',shell=True) #This function will create a window a open cmd to run our python script
+    # outp = subprocess.Popen([
+    #     python_interpreter, "outputfile.py"],
+    #     creationflags=subprocess.CREATE_NEW_CONSOLE,
+    #     stdout=subprocess.PIPE)
 
     #And then we store the result into our widget.
     ##First we need to open and read the log file 
